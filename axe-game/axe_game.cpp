@@ -19,7 +19,7 @@ int main()
     int b_circle_y{circle_y + circle_radius};
 
     // Axe variables
-    int axe_x{400};
+    int axe_x{500};
     int axe_y{0};
     int axe_lenght{50};
     int direction{10};
@@ -30,7 +30,11 @@ int main()
     int u_axe_y{axe_y};
     int b_axe_y{axe_x + axe_lenght};
 
-    bool collision_with_axe{true};
+    bool collision_with_axe =
+        (b_axe_y >= u_circle_y) &&
+        (u_axe_y <= b_circle_y) &&
+        (l_axe_x <= r_circle_x) &&
+        (r_axe_x >= l_circle_x);
 
     InitWindow(width, height, title);
 
@@ -47,6 +51,19 @@ int main()
         else
         {
             // Game logic begins
+
+            // Update edges
+            l_circle_x = circle_x - circle_radius;
+            r_circle_x = circle_x + circle_radius;
+            u_circle_y = circle_y - circle_radius;
+            b_circle_y = circle_y + circle_radius;
+
+            l_axe_x = axe_x;
+            r_axe_x = axe_x + axe_lenght;
+            u_axe_y = axe_y;
+            b_axe_y = axe_x + axe_lenght;
+
+            collision_with_axe = (b_axe_y >= u_circle_y) && (u_axe_y <= b_circle_y) && (l_axe_x <= r_circle_x) && (r_axe_x >= l_circle_x);
 
             if (IsKeyDown(KEY_D) && (circle_x + circle_radius) < width)
                 circle_x += circle_speed;
