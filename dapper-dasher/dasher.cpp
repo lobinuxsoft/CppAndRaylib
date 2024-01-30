@@ -17,16 +17,15 @@ bool isOnGround(AnimData data, int windowHeight)
 AnimData updateAnimData(AnimData data, float deltaTime, int maxFrame)
 {
     data.runningTime += deltaTime;
-    if(data.runningTime >= data.updateTime)
+    if (data.runningTime >= data.updateTime)
     {
         data.runningTime = 0.0f;
         data.rect.x = data.frame * data.rect.width;
         data.frame++;
-        if(data.frame > maxFrame)
+        if (data.frame > maxFrame)
             data.frame = 0;
-
     }
-    
+
     return data;
 }
 
@@ -75,6 +74,14 @@ int main()
 
     int velocity{0};
 
+    Texture2D background = LoadTexture("textures/far-buildings.png");
+    Texture2D midground = LoadTexture("textures/back-buildings.png");
+    Texture2D foreground = LoadTexture("textures/foreground.png");
+
+    float bgX{};
+    float mgX{};
+    float fgX{};
+
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
@@ -83,6 +90,40 @@ int main()
         // Start drawing
         BeginDrawing();
         ClearBackground(BLACK);
+
+        bgX -= 20 * dT;
+        if (bgX <= -background.width * 3.5)
+            bgX = 0.0;
+
+        mgX -= 40 * dT;
+        if (mgX <= -midground.width * 3.5)
+            mgX = 0.0;
+
+        fgX -= 80 * dT;
+        if (fgX <= -foreground.width * 3.5)
+            fgX = 0.0;
+
+
+        // Draw the background
+        Vector2 bg1Pos{bgX, -30.0};
+        Vector2 bg2Pos{bgX + background.width * 3.5, -30.0};
+
+        DrawTextureEx(background, bg1Pos, 0.0, 3.5, WHITE);
+        DrawTextureEx(background, bg2Pos, 0.0, 3.5, WHITE);
+
+        // Draw the midground
+        Vector2 mg1Pos{mgX, -30.0};
+        Vector2 mg2Pos{mgX + midground.width * 3.5, -30.0};
+
+        DrawTextureEx(midground, mg1Pos, 0.0, 3.5, WHITE);
+        DrawTextureEx(midground, mg2Pos, 0.0, 3.5, WHITE);
+
+        // Draw the foreground
+        Vector2 fg1Pos{fgX, -30.0};
+        Vector2 fg2Pos{fgX + foreground.width * 3.5, -30.0};
+
+        DrawTextureEx(foreground, fg1Pos, 0.0, 3.5, WHITE);
+        DrawTextureEx(foreground, fg2Pos, 0.0, 3.5, WHITE);
 
         isInAir = !isOnGround(scarfyData, windowDimensions[1]);
 
@@ -95,10 +136,7 @@ int main()
             velocity += jumpVel;
 
         for (int i = 0; i < sizeOfNebulae; i++)
-        {
-            // Update nebula position
             nebulae[i].pos.x += nebVel * dT;
-        }
 
         // Update scarfy position
         scarfyData.pos.y += velocity * dT;
@@ -107,14 +145,11 @@ int main()
         for (int i = 0; i < sizeOfNebulae; i++)
             nebulae[i] = updateAnimData(nebulae[i], dT, 7);
 
-        if(!isInAir)
+        if (!isInAir)
             scarfyData = updateAnimData(scarfyData, dT, 5);
 
         for (int i = 0; i < sizeOfNebulae; i++)
-        {
-            // Draw nebula
             DrawTextureRec(nebula, nebulae[i].rect, nebulae[i].pos, WHITE);
-        }
 
         // Draw scarfy
         DrawTextureRec(scarfy, scarfyData.rect, scarfyData.pos, WHITE);
@@ -125,6 +160,9 @@ int main()
 
     UnloadTexture(scarfy);
     UnloadTexture(nebula);
+    UnloadTexture(background);
+    UnloadTexture(midground);
+    UnloadTexture(foreground);
 
     CloseWindow();
 }
