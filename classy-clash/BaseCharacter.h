@@ -11,12 +11,12 @@ public:
     void undoMovement();
     Rectangle getCollisionRect();
     virtual void tick(float deltaTime);
+    virtual Vector2 getScreenPos() = 0;
 
 protected:
     Texture2D texture{};
     Texture2D idle{};
     Texture2D run{};
-    Vector2 screenPos{};
     Vector2 worldPos{};
     Vector2 worldPosLastFrame{};
 
@@ -32,6 +32,7 @@ protected:
     float width{};
     float height{};
     float scale{4.f};
+    Vector2 velocity{};
 };
 
 #endif // BASE_CHARACTER_H
