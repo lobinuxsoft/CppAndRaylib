@@ -51,7 +51,7 @@ void Character::tick(float deltaTime)
             getScreenPos().y + offset.y - weapon.height * scale,
             weapon.width * scale,
             weapon.height * scale};
-        
+
         rotation = IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? -35.f : 0.f;
     }
 
@@ -67,4 +67,11 @@ Vector2 Character::getScreenPos()
 {
     return Vector2{static_cast<float>(windowWidth) / 2.0f - scale * (0.5f * width),
                    static_cast<float>(windowHeight) / 2.0f - scale * (0.5f * height)};
+}
+
+void Character::takeDamage(float damage)
+{
+    health -= damage;
+    if (health <= 0.f)
+        setAlive(false);
 }

@@ -14,6 +14,7 @@ public:
 
 private:
     Character* target;
+    float damagePerSec{10.f};
 };
 
 #endif  // ENEMY_H
