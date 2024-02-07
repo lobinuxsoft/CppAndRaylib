@@ -25,8 +25,7 @@ int main()
     Enemy goblin{
         Vector2{},
         LoadTexture("characters/goblin_idle_spritesheet.png"),
-        LoadTexture("characters/goblin_run_spritesheet.png")
-    };
+        LoadTexture("characters/goblin_run_spritesheet.png")};
 
     goblin.setTarget(&knight);
 
@@ -40,9 +39,9 @@ int main()
         mapPos = Vector2Scale(knight.getWorldPos(), -1.f);
 
         DrawTextureEx(map, mapPos, 0.0, mapScale, WHITE);
-        
+
         // Draw the props
-        for(auto prop : props)
+        for (auto prop : props)
             prop.Render(knight.getWorldPos());
 
         knight.tick(GetFrameTime());
@@ -56,13 +55,19 @@ int main()
             knight.undoMovement();
         }
 
-        for(auto prop : props)
+        for (auto prop : props)
         {
-            if(CheckCollisionRecs(prop.getCollisionRect(knight.getWorldPos()), knight.getCollisionRect()))
+            if (CheckCollisionRecs(prop.getCollisionRect(knight.getWorldPos()), knight.getCollisionRect()))
                 knight.undoMovement();
         }
 
         goblin.tick(GetFrameTime());
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            if (CheckCollisionRecs(knight.getWeaponCollisionRec(), goblin.getCollisionRect()))
+                goblin.setAlive(false);
+        }
 
         EndDrawing();
     }
